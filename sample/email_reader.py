@@ -1,4 +1,5 @@
 # Local:
+import config
 import run_track
 import sheets
 import use_files
@@ -22,8 +23,8 @@ imaplib._MAXLINE = 10000000
 
 def main():
     # Sets email account
-    email = "receiver.server56@gmail.com"
-    password = "2belugas"
+    email = config.reader_email_address
+    password = config.reader_email_password
 
     # finds last_email logged from THE LAST TIME THE SCRIPT WAS RUN
     if use_files.basic_read_file("last_email") == "FILE NOT FOUND":
