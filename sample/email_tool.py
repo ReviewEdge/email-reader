@@ -5,6 +5,8 @@ import imapclient
 import imaplib
 imaplib._MAXLINE = 10000000
 
+# this tool only works with a gmail address
+
 
 def fix_text_format_for_email(text):
     text_ascii = text.encode("ascii", errors="ignore")
