@@ -6,11 +6,11 @@ imaplib._MAXLINE = 10000000
 
 # local:
 import config
-from run_tracker.sample import run_tracker
-from spotify_controller.sample import gsheets_tool
+from run_tracker_repo.sample import run_tracker
+from spotify_controller_repo.sample import gsheets_tool
 from furtherpy.sample import files_tool
-from email_reader.sample import email_tool
-from wiki_of_the_day.sample import send_wiki
+from email_reader_repo.sample import email_tool
+from wiki_of_the_day_repo.sample import send_wiki
 
 
 # NOTES:
