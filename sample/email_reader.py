@@ -1,15 +1,16 @@
-# Local:
-import config
-import run_track
-import sheets
-import use_files
-import use_email
-import send_wiki
-
+# non-local
 import os
 import time
 import imaplib
 imaplib._MAXLINE = 10000000
+
+# local:
+import config
+from run_tracker.sample import run_tracker
+from spotify_controller.sample import gsheets_tool
+from furtherpy.sample import files_tool
+from email_reader.sample import email_tool
+from wiki_of_the_day.sample import send_wiki
 
 
 # NOTES:
@@ -27,20 +28,20 @@ def main():
     password = config.reader_email_password
 
     # finds last_email logged from THE LAST TIME THE SCRIPT WAS RUN
-    if use_files.basic_read_file("last_email") == "FILE NOT FOUND":
+    if files_tool.basic_read_file("last_email") == "FILE NOT FOUND":
         last_email = -1
     else:
-        last_email = int(use_files.basic_read_file("last_email"))
+        last_email = int(files_tool.basic_read_file("last_email"))
 
     while 1:
         # connects to imap server for email account
-        imap_obj = use_email.get_imap_obj(email, password)
+        imap_obj = email_tool.get_imap_obj(email, password)
 
         # gets UIDs of all emails received today:
         # chooses search terms (from today)
-        today_uids = use_email.get_uids_today(imap_obj)
+        today_uids = email_tool.get_uids_today(imap_obj)
 
-        new_uid = use_email.get_last_uid(today_uids)
+        new_uid = email_tool.get_last_uid(today_uids)
 
         # checks if it was the last email to be checked
         if new_uid == last_email:
@@ -52,32 +53,32 @@ def main():
         # if new email:
         else:
             # Subject is NOT case sensitive
-            sub = use_email.get_email_subject(imap_obj, new_uid).lower()
+            sub = email_tool.get_email_subject(imap_obj, new_uid).lower()
             if sub == "run":
                 # should this be here?
-                service = sheets.authenticate_sheets_api()
+                service = gsheets_tool.authenticate_sheets_api()
 
-                dist = use_email.get_email_data(imap_obj, new_uid)[2].strip()
-                run_track.log_run(service, dist)
+                dist = email_tool.get_email_data(imap_obj, new_uid)[2].strip()
+                run_tracker.log_run(service, dist)
                 print("[email_reader] Logged " + dist + " mile run.")
 
             elif sub == "command":
-                command = use_email.get_email_data(imap_obj, new_uid)[2].strip()
+                command = email_tool.get_email_data(imap_obj, new_uid)[2].strip()
 
                 # runs Linux command
                 os.system(command)
 
             elif sub == "status":
-                received_address = use_email.get_email_data(imap_obj, new_uid)[1]
+                received_address = email_tool.get_email_data(imap_obj, new_uid)[1]
                 # sends status update
                 print("[email_reader] ", end="")
-                use_email.send_email(email, password, received_address,
+                email_tool.send_email(email, password, received_address,
                                      "The Email Receiver is running.", " ", True)
 
             # Automatically adds sender's email address to send_wiki list if they
             #   send email with the subject "add me wiki"
             elif sub == "add me wiki":
-                received_address = str(use_email.get_email_data(imap_obj, new_uid)[1])
+                received_address = str(email_tool.get_email_data(imap_obj, new_uid)[1])
 
                 print("[email_reader] Found new 'add me' request for Wiki of the Day from: " + received_address
                       + ". Adding to email list...")
@@ -91,7 +92,7 @@ def main():
             last_email = new_uid
 
             # Logs last checked email to file so it's not acted on the next time the script is run:
-            use_files.basic_write_file("last_email", str(last_email))
+            files_tool.basic_write_file("last_email", str(last_email))
 
             # this is the loop refresh time
             time.sleep(10)
