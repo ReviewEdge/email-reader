@@ -1,9 +1,3 @@
-# non-local
-import os
-import time
-import imaplib
-imaplib._MAXLINE = 10000000
-
 # local:
 import config
 from run_tracker_repo.sample import run_tracker
@@ -11,6 +5,12 @@ from spotify_controller_repo.sample import gsheets_tool
 from furtherpy.sample import files_tool
 from email_reader_repo.sample import email_tool
 from wiki_of_the_day_repo.sample import send_wiki
+
+# non-local
+import os
+import time
+import imaplib
+imaplib._MAXLINE = 10000000
 
 
 # NOTES:
@@ -72,8 +72,7 @@ def main():
                 received_address = email_tool.get_email_data(imap_obj, new_uid)[1]
                 # sends status update
                 print("[email_reader] ", end="")
-                email_tool.send_email(email, password, received_address,
-                                     "The Email Receiver is running.", " ", True)
+                email_tool.send_email(email, password, received_address, "The Email Receiver is running.", " ", True)
 
             # Automatically adds sender's email address to send_wiki list if they
             #   send email with the subject "add me wiki"
