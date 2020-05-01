@@ -99,7 +99,7 @@ def send_email(my_email, my_password, send_address, subject, text, print_on=Fals
     smtp_obj.quit()
 
     if print_on:
-        print("\tSent email: \n\t\t" + text + "\n\tto:\n\t\t" + send_address)
+        print("Sent email: '" + text + "' to: " + send_address)
 
 
 # demo
