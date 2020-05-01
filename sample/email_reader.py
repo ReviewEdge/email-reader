@@ -72,7 +72,8 @@ def main():
                 received_address = email_tool.get_email_data(imap_obj, new_uid)[1]
                 # sends status update
                 print("[email_reader] ", end="")
-                email_tool.send_email(email, password, received_address, "The Email Receiver is running.", " ", True)
+                email_tool.send_email(email, password, received_address, "The Email Receiver is running.",
+                                      "Status update: the Email Receiver is running.", True)
 
             # Automatically adds sender's email address to send_wiki list if they
             #   send email with the subject "add me wiki"

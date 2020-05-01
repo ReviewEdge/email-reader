@@ -1,4 +1,4 @@
-import email_reader_repo
+from email_reader_repo.sample import email_reader
 from furtherpy.sample import files_tool
 import time
 
@@ -8,9 +8,8 @@ import time
 
 print("\n[forever_email_reader] Starting email_reader.py")
 while 1:
-    # checks if any music is playing
     try:
-        email_reader_repo.main()
+        email_reader.main()
 
     except Exception as e:
         # saves error file
