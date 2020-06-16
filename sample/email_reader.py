@@ -2,6 +2,7 @@
 import config
 from run_tracker_repo.sample import run_tracker
 from spotify_controller_repo.sample import gsheets_tool
+from spotify_controller_repo.sample import spotify_blacklist
 from furtherpy.sample import files_tool
 from email_reader_repo.sample import email_tool
 from wiki_of_the_day_repo.sample import send_wiki
@@ -52,7 +53,7 @@ def main():
 
         # if new email:
         else:
-            # Subject is NOT case sensitive
+            # *Subject is NOT case sensitive
             sub = email_tool.get_email_subject(imap_obj, new_uid).lower()
             if sub == "run":
                 # should this be here?
@@ -84,6 +85,15 @@ def main():
                       + ". Adding to email list...")
 
                 send_wiki.add_email_to_list(received_address)
+
+            elif sub == "sc blacklist":
+                # gets song title from email
+                song_title = email_tool.get_email_data(imap_obj, new_uid)[2].strip()
+
+                print('[email_reader] Found new spotify_controller blacklist request. Adding song: "' + song_title +
+                      '" to blacklist...')
+                # adds song from email to spotify_controller blacklist
+                spotify_blacklist.blacklist_song_title(song_title)
 
             else:
                 print("[email_reader] Found email with subject: " + sub + ". No action taken.")
