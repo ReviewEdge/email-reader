@@ -13,7 +13,7 @@ while 1:
 
     except Exception as e:
         if str(e) == "list index out of range":
-            print("\n[forever_email_reader] No emails have been yet received today.\nChecking again...\n")
+            print("\n[forever_email_reader] No emails have been received yet today.\nChecking again...\n")
 
         else:
             # saves error to file
